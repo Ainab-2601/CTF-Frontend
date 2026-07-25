@@ -101,7 +101,7 @@ Tools that may help: exiftool, Python PIL/piexif, or any online EXIF viewer.`,
   oracle: [
     {
       id: 7,
-      title:"Oracle I — The Operative's Trail",
+      title: "Oracle I — The Operative's Trail",
       description: `A VOID operative codenamed SPECTRE has been leaking intelligence. Our analysts traced their digital footprint to a public profile.
 
 Start here:
@@ -154,7 +154,7 @@ Your objective: Gain admin access to the control panel and retrieve the classifi
 No credentials have been provided. You'll need to find another way in.`,
       points: 100,
     },
- {
+    {
       id: 11,
       title: 'Nebula II — Hidden Vault',
       description: `The VOID Archive claims to host only public records — but every server has secrets it forgets to hide properly.
@@ -164,66 +164,66 @@ Explore the site. Check what the robots don't want you to see, and what the fron
 Target: http://localhost:5001`,
       points: 100,
     },
-   {
-  id: 12,
-  title: 'Nebula III — Silent Diagnostics',
-  description: `VOID's network diagnostics console lets you ping any host — but their security team was in a hurry and only blocked the "obvious" characters.
+    {
+      id: 12,
+      title: 'Nebula III — Silent Diagnostics',
+      description: `VOID's network diagnostics console lets you ping any host — but their security team was in a hurry and only blocked the "obvious" characters.
 
 Sometimes the most dangerous tool is the one you forgot to lock.
 
 Target: http://localhost:5002
 
 Note: This challenge requires sending a raw HTTP POST request — the web form won't let you type what you need. Use curl, Postman, or a script.`,
-  points: 100,
-},
+      points: 100,
+    },
   ],
   axiom: [
-{
-  id: 13,
-  title: 'Axiom I — Corrupted Transmission',
-  description: `VOID intercepted this image transmission — but the file arrived damaged. It won't open in any standard viewer.
+    {
+      id: 13,
+      title: 'Axiom I — Corrupted Transmission',
+      description: `VOID intercepted this image transmission — but the file arrived damaged. It won't open in any standard viewer.
 
 Sometimes files aren't broken by accident. Look at the raw bytes and compare against what a valid file structure should look like.
 
 Download the file and inspect it in a hex editor.
 
 Tools that may help: HxD (Windows), xxd, or any hex editor.`,
-  points: 100,
-  downloadUrl: 'http://localhost:8000/files/transmission_corrupted.png',
-  downloadName: 'transmission_corrupted.png',
-},
-  {
-  id: 14,
-  title: 'Axiom II — The Keygen',
-  description: `VOID's activation system requires a valid serial to unlock. We intercepted the program file — but it's protecting its own logic somehow.
+      points: 100,
+      downloadUrl: 'http://localhost:8000/files/transmission_corrupted.png',
+      downloadName: 'transmission_corrupted.png',
+    },
+    {
+      id: 14,
+      title: 'Axiom II — The Keygen',
+      description: `VOID's activation system requires a valid serial to unlock. We intercepted the program file — but it's protecting its own logic somehow.
 
 Figure out how the file hides its real code, extract the validation logic, and derive a serial that passes the check.
 
 Run the file with: python void_activation.py`,
-  points: 150,
-  downloadUrl: 'http://localhost:4000/files/void_activation.py',
-  downloadName: 'void_activation.py',
-},
- {
-  id: 15,
-  title: 'Axiom III — The Deep Vault',
-  description: `VOID's final archive lock intercepted a fragment of an internal transmission — possibly the vault key, encoded before transmission failure:
+      points: 150,
+      downloadUrl: 'http://localhost:4000/files/void_activation.py',
+      downloadName: 'void_activation.py',
+    },
+    {
+      id: 15,
+      title: 'Axiom III — The Deep Vault',
+      description: `VOID's final archive lock intercepted a fragment of an internal transmission — possibly the vault key, encoded before transmission failure:
 
 gu3_i01q_a3i3e_fy33cf
 
 We also recovered the lock program itself, but its validation logic is not straightforward — reverse it carefully.
 
 Run the file with: python void_lock.py`,
-  points: 150,
-  downloadUrl: 'http://localhost:4000/files/void_lock.py',
-  downloadName: 'void_lock.py',
-},
+      points: 150,
+      downloadUrl: 'http://localhost:4000/files/void_lock.py',
+      downloadName: 'void_lock.py',
+    },
   ],
   'void-core': [
- {
-  id: 16,
-  title: 'Void Core — The Convergence',
-  description: `This is it — the final barrier. VOID's core systems require three fragments to align before the vault opens.
+    {
+      id: 16,
+      title: 'Void Core — The Convergence',
+      description: `This is it — the final barrier. VOID's core systems require three fragments to align before the vault opens.
 
 FRAGMENT I — Intercepted Transmission (hex, single-byte XOR):
 35393b343f38333256373535332525563d332f4c560c4504462905471118421a29031847024512
@@ -235,24 +235,24 @@ FRAGMENT III — Once you recover the hidden program, it will not open easily. I
 Combine what you find. The key that decodes the first fragment is the same key the final lock demands.
 
 Download the image below to begin Fragment II.`,
-  points: 300,
-  downloadUrl: 'http://localhost:4000/files/void_core_transmission.png',
-  downloadName: 'void_core_transmission.png',
-},
+      points: 300,
+      downloadUrl: 'http://localhost:4000/files/void_core_transmission.png',
+      downloadName: 'void_core_transmission.png',
+    },
   ],
   'the-summit': [
-  {
-  id: 17,
-  title: 'The Summit — Broken Authority',
-  description: `The final transmission has cut. One node remains — THE SUMMIT — guarded by four independent, differently-broken subsystems.
+    {
+      id: 17,
+      title: 'The Summit — Broken Authority',
+      description: `The final transmission has cut. One node remains — THE SUMMIT — guarded by four independent, differently-broken subsystems.
 
 Target: http://SUMMIT_SERVER_IP:5003
 
 Break any subsystem to seize control. Whoever captures dethrones the current holder instantly. But that subsystem won't work twice in a row — once used, find a different weakness to recapture. Only after all four have been used does the cycle reset.
 
 Hold The Summit and earn +20 points every 60 seconds — for as long as you can defend it.`,
-  points: 0,
-},
+      points: 0,
+    },
   ],
 }
 
@@ -357,11 +357,11 @@ export const ChallengePanel: React.FC<{ activePlanetId: string }> = ({ activePla
                 </pre>
 
                 {challenge.downloadUrl && (
-                  
-                  <a   href={challenge.downloadUrl}
+                  <a
+                    href={challenge.downloadUrl}
                     download={challenge.downloadName}
                     className="inline-flex items-center gap-2 text-xs text-sky-400 border border-sky-900 px-3 py-1.5 rounded hover:bg-sky-950/30 transition-colors"
-                    >
+                  >
                     <Download size={12} />
                     Download {challenge.downloadName}
                   </a>
