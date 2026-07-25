@@ -163,7 +163,7 @@ Explore the site. Check what the robots don't want you to see, and what the fron
 
 Target: http://localhost:5001`,
       points: 100,
-    },,
+    },
    {
   id: 12,
   title: 'Nebula III — Silent Diagnostics',
