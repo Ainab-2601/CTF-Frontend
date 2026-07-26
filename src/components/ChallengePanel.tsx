@@ -17,6 +17,8 @@ interface Challenge {
   downloads?: ChallengeDownload[]
 }
 
+const BACKEND = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'
+
 const CHALLENGES: Record<string, Challenge[]> = {
   krypton: [
     {
@@ -107,8 +109,8 @@ Hints:
 - HINT 2: The key is shorter than you think — but not short enough.`,
       points: 100,
       downloads: [
-        { url: 'http://localhost:8000/files/void_signal.wav', name: 'void_signal.wav' },
-        { url: 'http://localhost:8000/files/encrypted.bin', name: 'encrypted.bin' },
+        { url: `${BACKEND}/files/void_signal.wav`, name: 'void_signal.wav' },
+        { url: `${BACKEND}/files/encrypted.bin`, name: 'encrypted.bin' },
       ],
     },
     {
@@ -126,50 +128,64 @@ Hints:
 - HINT 1: Whitespace is never just whitespace.
 - HINT 2: 48 bytes. Think about how AES works.`,
       points: 200,
-      downloadUrl: 'http://localhost:8000/files/dead_drop_1.zip',
+      downloadUrl: `${BACKEND}/files/dead_drop_1.zip`,
       downloadName: 'dead_drop_1.zip',
     },
   ],
   oracle: [
     {
       id: 7,
-      title: "Oracle I — The Operative's Trail",
-      description: `A VOID operative codenamed SPECTRE has been leaking intelligence. Our analysts traced their digital footprint to a public profile.
+      title: 'Oracle I — Trace Back',
+      description: `VOID went dark after sending a single transmission. Our team intercepted it before it disappeared. The message looks like noise — but somewhere in the headers, they left a trace. Find it.
 
-Start here:
-https://gist.github.com/Ainab-2601/9ea763fffc433558dc79ecd1dd9f2706
+We intercepted a suspicious transmission sent by the operative known as VOID. The raw headers have been captured and preserved.
 
-Follow the trail. The flag is hidden in plain sight — but you'll need to decode it.`,
-      points: 100,
+Analyze the transmission carefully. Not every field is what it seems — but one of them is exactly what you're looking for.
+
+Hints:
+- Forget the message. Read the envelope.
+- Email clients hide a lot. Raw headers hide nothing.`,
+      points: 50,
+      downloadUrl: `${BACKEND}/files/trace_back.png`,
+      downloadName: 'trace_back.png',
     },
     {
       id: 8,
-      title: 'Oracle II — Classified Document',
-      description: `VOID's intelligence division accidentally leaked a classified transmission log. The document looks clean on the surface — but our forensics team suspects critical information is embedded within the file itself.
+      title: 'Oracle II — Phantom Document',
+      description: `VOID has been transmitting from across the city — but our analysts believe every signal originates from the same anchor point. The coordinates don't lie. But do they tell the whole truth?
 
-Download the document and dig deeper than the visible text.
+A classified PHANTOM UNIT transmission log has been recovered. It contains 10 intercepted signals, each with embedded coordinates.
 
-Tools that may help: exiftool, pdfinfo, Python PyPDF2, or any online PDF metadata viewer.`,
+All signals cluster around a single city. VOID always returns to the same place.
+
+Find the anchor. The rest will follow.
+
+Hints:
+- All roads lead to one landmark. What is it exactly?
+- Numbers never lie — but they do hide things. How far off is each signal?
+- Think in whole numbers. Think in characters.`,
       points: 100,
-      downloadUrl: 'http://localhost:8000/files/oracle_classified.pdf',
-      downloadName: 'oracle_classified.pdf',
+      downloadUrl: `${BACKEND}/files/phantom_document.pdf`,
+      downloadName: 'phantom_document.pdf',
     },
     {
       id: 9,
-      title: 'Oracle III — The Last Known Location',
-      description: `A VOID operative was last seen transmitting from a remote mountain location. We intercepted this image from their device before the signal went dark.
+      title: 'Oracle III — Ghost Identity',
+      description: `VOID went dark — but not before leaving a trail. A leaked profile. A recovered image. An encrypted transmission. Every piece connects to the next. Find the drop. Decode the message. Track VOID down.
 
-Your mission: Identify the exact location shown in the image using reverse image search and geolocation techniques.
+Two files were recovered from a compromised PHANTOM UNIT server:
+- contact.txt — a leaked operative profile with a partially recovered transmission
+- profile.jpg — a blurry profile image with intact metadata
 
-The flag format is: ZEROSIG{cityname_latN_lonE}
-- Replace dots with underscores
-- City name in leet speak (a→4, e→3, i→1, o→0)
-- Coordinates rounded to 4 decimal places
-
-Hint: The operative fled to the mountains of northern Pakistan.`,
-      points: 100,
-      downloadUrl: 'http://localhost:8000/files/skardu.jpg',
-      downloadName: 'skardu.jpg',
+Hints:
+- Images carry more than pixels.
+- The encrypted string needs a key. Where would VOID hide a key?
+- Once you find the drop location, you're not done yet.`,
+      points: 200,
+      downloads: [
+        { url: `${BACKEND}/files/contact.txt`, name: 'contact.txt' },
+        { url: `${BACKEND}/files/profile.jpg`, name: 'profile.jpg' },
+      ],
     },
   ],
   nebula: [
@@ -221,7 +237,7 @@ Download the file and inspect it in a hex editor.
 
 Tools that may help: HxD (Windows), xxd, or any hex editor.`,
       points: 100,
-      downloadUrl: 'http://localhost:8000/files/transmission_corrupted.png',
+      downloadUrl: `${BACKEND}/files/transmission_corrupted.png`,
       downloadName: 'transmission_corrupted.png',
     },
     {
@@ -233,7 +249,7 @@ Figure out how the file hides its real code, extract the validation logic, and d
 
 Run the file with: python void_activation.py`,
       points: 150,
-      downloadUrl: 'http://localhost:4000/files/void_activation.py',
+      downloadUrl: `${BACKEND}/files/void_activation.py`,
       downloadName: 'void_activation.py',
     },
     {
@@ -247,7 +263,7 @@ We also recovered the lock program itself, but its validation logic is not strai
 
 Run the file with: python void_lock.py`,
       points: 150,
-      downloadUrl: 'http://localhost:4000/files/void_lock.py',
+      downloadUrl: `${BACKEND}/files/void_lock.py`,
       downloadName: 'void_lock.py',
     },
   ],
@@ -268,7 +284,7 @@ Combine what you find. The key that decodes the first fragment is the same key t
 
 Download the image below to begin Fragment II.`,
       points: 300,
-      downloadUrl: 'http://localhost:4000/files/void_core_transmission.png',
+      downloadUrl: `${BACKEND}/files/void_core_transmission.png`,
       downloadName: 'void_core_transmission.png',
     },
   ],
