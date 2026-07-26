@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Shield, Play, RotateCcw, Trash2, Trophy } from 'lucide-react'
+import { Shield, Play, RotateCcw, Trash2, Trophy, Square } from 'lucide-react'
 
 interface Team {
   id: string
@@ -42,6 +42,18 @@ export const Admin: React.FC = () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ round, durationSeconds: duration })
+    })
+    const data = await res.json()
+    setMessage(data.message)
+    fetchLeaderboard()
+    setTimeout(() => setMessage(''), 3000)
+  }
+
+  const endRound = async () => {
+    if (!confirm('Current round turant khatam ho jayega — flag submissions lock ho jayenge jab tak naya round start na ho. Confirm?')) return
+    const res = await fetch(`${BACKEND}/api/rounds/end`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
     })
     const data = await res.json()
     setMessage(data.message)
@@ -143,6 +155,13 @@ export const Admin: React.FC = () => {
                 className="w-full bg-sky-700 hover:bg-sky-600 text-white text-xs font-bold py-2 rounded tracking-widest uppercase transition-all"
               >
                 START ROUND {round}
+              </button>
+              <button
+                onClick={endRound}
+                className="w-full flex items-center justify-center gap-2 bg-amber-900/40 hover:bg-amber-800/60 border border-amber-800 text-amber-400 text-xs font-bold py-2 rounded tracking-widest uppercase transition-all"
+              >
+                <Square size={12} />
+                END CURRENT ROUND
               </button>
             </div>
           </div>
