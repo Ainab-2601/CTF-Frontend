@@ -13,17 +13,19 @@ interface Challenge {
 
 const CHALLENGES: Record<string, Challenge[]> = {
   krypton: [
-    {
+   {
       id: 1,
-      title: 'Krypton I — The XOR Transmission',
-      description: `VOID's first encrypted transmission has been intercepted. Our analysts believe it uses a single-byte XOR cipher.
+      title: 'Krypton I — Layered Transmission',
+      description: `VOID's message was encrypted in three layers. Work backwards to decrypt it.
 
-Encrypted message (hex):
-2c332439253f310d0e4604291547061e450429150442151d45120b
+Ciphertext:
+fUN1MlN4V3Q3ZVJ7TlBaVllsR30=
 
-Key hint: Think of the enemy. One word, all lowercase, first letter only.
+1. Caesar shift (key = 7) was applied first
+2. Then the string was reversed
+3. Then Base64 encoded
 
-Decrypt it and submit the flag.`,
+Find the flag.`,
       points: 50,
     },
     {
