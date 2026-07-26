@@ -15,6 +15,7 @@ interface Challenge {
   downloadUrl?: string
   downloadName?: string
   downloads?: ChallengeDownload[]
+  hintsCount?: number
 }
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'
@@ -102,16 +103,13 @@ You've intercepted two files from a suspicious transmission:
 
 Neither file makes sense on its own. Figure out how they're related and extract the hidden message.
 
-Flag format: ZEROSIG{...}
-
-Hints:
-- HINT 1: Your ears won't help you here. Try your eyes.
-- HINT 2: The key is shorter than you think — but not short enough.`,
+Flag format: ZEROSIG{...}`,
       points: 100,
       downloads: [
         { url: `${BACKEND}/files/void_signal.wav`, name: 'void_signal.wav' },
         { url: `${BACKEND}/files/encrypted.bin`, name: 'encrypted.bin' },
       ],
+      hintsCount: 2,
     },
     {
       id: 6,
@@ -122,14 +120,11 @@ You've recovered a suspicious archive from a compromised server. Inside are two 
 
 But somewhere in this package, a message is waiting.
 
-Find it.
-
-Hints:
-- HINT 1: Whitespace is never just whitespace.
-- HINT 2: 48 bytes. Think about how AES works.`,
+Find it.`,
       points: 200,
       downloadUrl: `${BACKEND}/files/dead_drop_1.zip`,
       downloadName: 'dead_drop_1.zip',
+      hintsCount: 2,
     },
   ],
   oracle: [
@@ -140,14 +135,11 @@ Hints:
 
 We intercepted a suspicious transmission sent by the operative known as VOID. The raw headers have been captured and preserved.
 
-Analyze the transmission carefully. Not every field is what it seems — but one of them is exactly what you're looking for.
-
-Hints:
-- Forget the message. Read the envelope.
-- Email clients hide a lot. Raw headers hide nothing.`,
+Analyze the transmission carefully. Not every field is what it seems — but one of them is exactly what you're looking for.`,
       points: 50,
       downloadUrl: `${BACKEND}/files/trace_back.png`,
       downloadName: 'trace_back.png',
+      hintsCount: 2,
     },
     {
       id: 8,
@@ -158,15 +150,11 @@ A classified PHANTOM UNIT transmission log has been recovered. It contains 10 in
 
 All signals cluster around a single city. VOID always returns to the same place.
 
-Find the anchor. The rest will follow.
-
-Hints:
-- All roads lead to one landmark. What is it exactly?
-- Numbers never lie — but they do hide things. How far off is each signal?
-- Think in whole numbers. Think in characters.`,
+Find the anchor. The rest will follow.`,
       points: 100,
       downloadUrl: `${BACKEND}/files/phantom_document.pdf`,
       downloadName: 'phantom_document.pdf',
+      hintsCount: 3,
     },
     {
       id: 9,
@@ -175,17 +163,13 @@ Hints:
 
 Two files were recovered from a compromised PHANTOM UNIT server:
 - contact.txt — a leaked operative profile with a partially recovered transmission
-- profile.jpg — a blurry profile image with intact metadata
-
-Hints:
-- Images carry more than pixels.
-- The encrypted string needs a key. Where would VOID hide a key?
-- Once you find the drop location, you're not done yet.`,
+- profile.jpg — a blurry profile image with intact metadata`,
       points: 200,
       downloads: [
         { url: `${BACKEND}/files/contact.txt`, name: 'contact.txt' },
         { url: `${BACKEND}/files/profile.jpg`, name: 'profile.jpg' },
       ],
+      hintsCount: 3,
     },
   ],
   nebula: [
@@ -304,6 +288,13 @@ Hold The Summit and earn +20 points every 60 seconds — for as long as you can 
   ],
 }
 
+interface HintStatus {
+  index: number
+  cost: number
+  unlocked: boolean
+  text: string | null
+}
+
 export const ChallengePanel: React.FC<{ activePlanetId: string }> = ({ activePlanetId }) => {
   const currentTeamId = useStore((state) => state.currentTeamId)
   const planets = useStore((state) => state.planets)
@@ -311,9 +302,58 @@ export const ChallengePanel: React.FC<{ activePlanetId: string }> = ({ activePla
   const [flags, setFlags] = useState<Record<number, string>>({})
   const [statuses, setStatuses] = useState<Record<number, { type: string; message: string }>>({})
   const [loading, setLoading] = useState<Record<number, boolean>>({})
+  const [hints, setHints] = useState<Record<number, HintStatus[]>>({})
+  const [hintLoading, setHintLoading] = useState<Record<string, boolean>>({})
 
   const activePlanet = planets[activePlanetId]
   const challenges = CHALLENGES[activePlanetId] || []
+
+  const fetchHints = async (challengeId: number) => {
+    if (!currentTeamId) return
+    try {
+      const res = await fetch(
+        `${BACKEND}/api/hints/status?teamId=${currentTeamId}&challengeId=${challengeId}`
+      )
+      const data = await res.json()
+      setHints(prev => ({ ...prev, [challengeId]: data }))
+    } catch {
+      // silently fail — hints panel simply won't render
+    }
+  }
+
+  const revealHint = async (challengeId: number, hintIndex: number) => {
+    if (!currentTeamId) return
+    const key = `${challengeId}-${hintIndex}`
+    setHintLoading(prev => ({ ...prev, [key]: true }))
+    try {
+      const res = await fetch(`${BACKEND}/api/hints/unlock`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ teamId: currentTeamId, challengeId, hintIndex }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setHints(prev => ({
+          ...prev,
+          [challengeId]: (prev[challengeId] || []).map(h =>
+            h.index === hintIndex ? { ...h, unlocked: true, text: data.text } : h
+          ),
+        }))
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setHintLoading(prev => ({ ...prev, [key]: false }))
+    }
+  }
+
+  const toggleExpand = (challenge: Challenge) => {
+    const willExpand = expandedId !== challenge.id
+    setExpandedId(willExpand ? challenge.id : null)
+    if (willExpand && challenge.hintsCount) {
+      fetchHints(challenge.id)
+    }
+  }
 
   const submitFlag = async (challengeId: number, planetId: string) => {
     const flag = flags[challengeId]
@@ -384,7 +424,7 @@ export const ChallengePanel: React.FC<{ activePlanetId: string }> = ({ activePla
           <div key={challenge.id} className="border border-slate-800 rounded-lg overflow-hidden">
             {/* Challenge Header */}
             <button
-              onClick={() => setExpandedId(expandedId === challenge.id ? null : challenge.id)}
+              onClick={() => toggleExpand(challenge)}
               className="w-full flex items-center justify-between px-4 py-3 bg-slate-900/60 hover:bg-slate-800/60 transition-colors text-left"
             >
               <div className="flex items-center gap-3">
@@ -427,6 +467,31 @@ export const ChallengePanel: React.FC<{ activePlanetId: string }> = ({ activePla
                         <Download size={12} />
                         Download {d.name}
                       </a>
+                    ))}
+                  </div>
+                )}
+
+                {challenge.hintsCount && (
+                  <div className="space-y-2">
+                    <div className="text-[10px] text-slate-500 uppercase tracking-wider">Hints</div>
+                    {(hints[challenge.id] || []).map((h) => (
+                      <div key={h.index} className="flex items-center gap-2">
+                        {h.unlocked ? (
+                          <div className="flex-1 text-xs text-amber-300 bg-amber-950/20 border border-amber-900/50 rounded px-3 py-2">
+                            {h.text}
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => revealHint(challenge.id, h.index)}
+                            disabled={hintLoading[`${challenge.id}-${h.index}`]}
+                            className="flex-1 text-xs text-amber-400 border border-amber-900/60 rounded px-3 py-2 hover:bg-amber-950/20 transition-colors disabled:opacity-50"
+                          >
+                            {hintLoading[`${challenge.id}-${h.index}`]
+                              ? 'Unlocking...'
+                              : `Reveal Hint ${h.index + 1} (-${h.cost} pts)`}
+                          </button>
+                        )}
+                      </div>
                     ))}
                   </div>
                 )}
