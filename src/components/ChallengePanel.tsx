@@ -2,6 +2,11 @@ import React, { useState } from 'react'
 import { useStore } from '../store/useStore'
 import { Terminal, ShieldCheck, AlertCircle, ChevronDown, ChevronUp, Download } from 'lucide-react'
 
+interface ChallengeDownload {
+  url: string
+  name: string
+}
+
 interface Challenge {
   id: number
   title: string
@@ -9,11 +14,12 @@ interface Challenge {
   points: number
   downloadUrl?: string
   downloadName?: string
+  downloads?: ChallengeDownload[]
 }
 
 const CHALLENGES: Record<string, Challenge[]> = {
   krypton: [
-   {
+    {
       id: 1,
       title: 'Krypton I — Layered Transmission',
       description: `VOID's message was encrypted in three layers. Work backwards to decrypt it.
@@ -30,74 +36,98 @@ Find the flag.`,
     },
     {
       id: 2,
-      title: 'Krypton II — Fractured Primes',
-      description: `VOID encrypted a secret using RSA — but they made a critical mistake. They used dangerously small prime numbers.
+      title: 'Krypton II — Multi-Layer Encryption',
+      description: `Deep space receiver #7 intercepted this binary sequence from VOID's last known coordinates.
 
-Public Key:
-n = 3233
-e = 17
+00111111 00011001 01010111 00101000 01000010 01100011
+00010110 00011100 00101101 00100110 00101101 01100010
+00000101 00110011 01001010 00001101 00101000 01011100
+00011000
 
-Ciphertext (list of integers):
-[1107, 368, 529, 690, 119, 612, 2412, 2906, 2271, 368, 1230, 119, 1369, 529, 281, 884, 624, 2412, 368, 1773]
+VOID's encryption uses multiple layers:
+1. Reversed the byte order
+2. Applied XOR with a repeating 3-byte key
 
-Factor n, compute the private key d, and decrypt the message character by character.`,
-      points: 50,
+Then decrypt the entire message and find the flag.`,
+      points: 100,
     },
     {
       id: 3,
-      title: 'Krypton III — The Layered Signal',
-      description: `VOID layered their encryption three times, thinking it would be unbreakable. Peel back each layer to reveal the transmission.
+      title: 'Krypton III — Scrambled Multi-Layer Encryption',
+      description: `VOID uses scrambled nested encryption to hide communications.
 
-Encoded message:
-d3d31566b6e444a577d423d4b693c636a7b684e4379365d40387754647473325a4e413453565b675
+We intercepted this final ciphertext:
+[2348, 7985, 4594, 2667, 4792, 6927, 566, 3563, 1669, 1519, 9192, 2310, 7504, 2667, 8075, 5141, 4014, 4677, 6341]
 
-Instructions:
-1. Reverse the string
-2. Decode from Hex
-3. Decode from Base64`,
-      points: 50,
+Layer 4 (scrambling):
+- The ciphertext bytes were shuffled in an unknown order
+- You must recover the original sequence
+
+Layer 3 (outer RSA):
+- n₃ = 9991
+
+Layer 2 (inner RSA):
+- n₂ = 3233
+
+Layer 1 (encoding):
+- Unknown single-byte XOR key
+- Each byte rotated left by (position mod 8) bits
+
+Find the correct byte order, decrypt both RSA layers, undo the rotation, brute-force the XOR key, and recover VOID's message.`,
+      points: 200,
     },
   ],
   phantom: [
     {
       id: 4,
-      title: 'Phantom I — Ghost in the Telescope',
-      description: `VOID disguised a transmission inside a fake telescope image broadcast across the Phantom system.
+      title: 'Phantom I — RGB LSB Steganography',
+      description: `VOID hid a message in the least significant bits of RGB color values.
 
-The signal is hidden using LSB (Least Significant Bit) steganography. A passphrase was used during encoding.
+Each RGB triplet contributes one bit to the message (from the LSB of R, G, or B in sequence).
 
-Download the image and extract what's hidden.
-
-Passphrase hint: The name of this galaxy operation — one word, all lowercase.`,
+RGB values (decimal):
+(254, 255, 254) (255, 255, 254) (255, 254, 254) (255, 254, 254) (254, 255, 254) (255, 254, 255) (254, 255, 254) (254, 255, 254) (254, 255, 254) (254, 255, 255) (255, 255, 254) (255, 254, 255) (254, 254, 255) (255, 254, 255) (254, 254, 255) (254, 254, 255) (254, 255, 254) (254, 254, 255) (255, 255, 254) (255, 255, 255) (255, 254, 255) (255, 254, 255) (254, 254, 254) (255, 255, 255) (254, 255, 255) (255, 254, 254) (254, 254, 254) (254, 255, 255) (254, 255, 254) (255, 254, 255) (255, 255, 254) (255, 255, 254) (254, 255, 254) (255, 254, 254) (255, 254, 254) (255, 255, 254) (255, 255, 255) (254, 254, 254) (255, 255, 254) (254, 254, 255) (254, 255, 255) (255, 254, 255) (254, 254, 254) (255, 254, 254) (255, 255, 254) (255, 254, 255) (255, 255, 254) (255, 255, 255) (254, 255, 255) (255, 255, 255)`,
       points: 50,
-      downloadUrl: 'http://localhost:8000/files/krypton_signal.png',
-      downloadName: 'phantom_telescope.png',
     },
     {
       id: 5,
-      title: 'Phantom II — The Silent Frequency',
-      description: `VOID transmitted a secret signal disguised as background cosmic noise. Our receivers picked up this WAV file from the Phantom system.
+      title: 'Phantom II — Void Signal',
+      description: `An unknown actor has been broadcasting a strange audio transmission over an encrypted channel. Our team managed to intercept two files — but we can't make sense of either of them. The audio sounds like pure static. The binary file is unreadable. Maybe they're connected.
 
-It sounds like static — but nothing in deep space is ever just noise.
+You've intercepted two files from a suspicious transmission:
+- void_signal.wav — an audio file that sounds like noise
+- encrypted.bin — an encrypted binary file with no obvious format
 
-Download the audio file and analyze it. The flag is hidden in the least significant bits of the audio samples.`,
-      points: 50,
-      downloadUrl: 'http://localhost:8000/files/phantom_signal.wav',
-      downloadName: 'phantom_signal.wav',
+Neither file makes sense on its own. Figure out how they're related and extract the hidden message.
+
+Flag format: ZEROSIG{...}
+
+Hints:
+- HINT 1: Your ears won't help you here. Try your eyes.
+- HINT 2: The key is shorter than you think — but not short enough.`,
+      points: 100,
+      downloads: [
+        { url: 'http://localhost:8000/files/void_signal.wav', name: 'void_signal.wav' },
+        { url: 'http://localhost:8000/files/encrypted.bin', name: 'encrypted.bin' },
+      ],
     },
     {
       id: 6,
-      title: 'Phantom III — Dead Starlight',
-      description: `VOID's telescope captured this image from deep space — but our forensics team suspects something was embedded in the file itself, not the pixels.
+      title: 'Phantom III — Dead Drop',
+      description: `A ghost operative left behind a dead drop before going silent. Two files. No instructions. No contact. Whatever they hid, they didn't want it found easily. But they wanted it found by the right person.
 
-Sometimes the most sensitive data hides in plain sight — in the file's own metadata.
+You've recovered a suspicious archive from a compromised server. Inside are two files — an image and a note. Neither seems to contain anything useful.
 
-Download the image and inspect its EXIF data.
+But somewhere in this package, a message is waiting.
 
-Tools that may help: exiftool, Python PIL/piexif, or any online EXIF viewer.`,
-      points: 50,
-      downloadUrl: 'http://localhost:8000/files/phantom_metadata.jpg',
-      downloadName: 'phantom_metadata.jpg',
+Find it.
+
+Hints:
+- HINT 1: Whitespace is never just whitespace.
+- HINT 2: 48 bytes. Think about how AES works.`,
+      points: 200,
+      downloadUrl: 'http://localhost:8000/files/dead_drop_1.zip',
+      downloadName: 'dead_drop_1.zip',
     },
   ],
   oracle: [
@@ -367,6 +397,22 @@ export const ChallengePanel: React.FC<{ activePlanetId: string }> = ({ activePla
                     <Download size={12} />
                     Download {challenge.downloadName}
                   </a>
+                )}
+
+                {challenge.downloads && challenge.downloads.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {challenge.downloads.map((d) => (
+                      <a
+                        key={d.url}
+                        href={d.url}
+                        download={d.name}
+                        className="inline-flex items-center gap-2 text-xs text-sky-400 border border-sky-900 px-3 py-1.5 rounded hover:bg-sky-950/30 transition-colors"
+                      >
+                        <Download size={12} />
+                        Download {d.name}
+                      </a>
+                    ))}
+                  </div>
                 )}
 
                 <div className="space-y-2 pt-1">
