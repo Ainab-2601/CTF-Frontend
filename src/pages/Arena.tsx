@@ -18,7 +18,7 @@ export const Arena: React.FC = () => {
   }, [initSocket]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-6 select-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
+    <div className="min-h-screen bg-slate-950 text-slate-100 p-4 md:p-6 selectable bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
       <header className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-900 pb-5 mb-6">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 tracking-widest uppercase">
