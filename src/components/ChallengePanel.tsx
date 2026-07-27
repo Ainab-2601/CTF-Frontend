@@ -173,17 +173,20 @@ Two files were recovered from a compromised PHANTOM UNIT server:
     },
   ],
   nebula: [
-    {
+   {
       id: 10,
-      title: 'Nebula I — Unauthorized Entry',
-      description: `VOID's Nebula sector control panel has been located. Our intelligence suggests the authentication system was built hastily — and sloppily.
+      title: 'Nebula I — The Relay Node',
+      description: `VOID rebuilt their control node after the last breach — but rumor has it a legacy debug feature never got removed.
 
-The panel is running at:
-https://nebula-challenges-zerosignalctf.up.railway.app
+Target: https://nebula-challenges-zerosignalctf.up.railway.app
 
-Your objective: Gain admin access to the control panel and retrieve the classified signal.
+This is a multi-stage exploit chain, not a single trick:
 
-No credentials have been provided. You'll need to find another way in.`,
+1. Somewhere on this node, a hidden value can only be confirmed one bit at a time — the app will only ever tell you TRUE or FALSE, nothing more.
+2. What you extract lets you reconstruct a signing secret. Use it to forge your own credentials.
+3. Your forged credentials only buy you a live, time-limited handshake. The flag is never stored anywhere on the server — it only gets generated the moment you complete that handshake correctly.
+
+No single request solves this. You will need to script it.`,
       points: 100,
     },
     {
