@@ -179,7 +179,7 @@ Two files were recovered from a compromised PHANTOM UNIT server:
       description: `VOID's Nebula sector control panel has been located. Our intelligence suggests the authentication system was built hastily — and sloppily.
 
 The panel is running at:
-http://ADMIN_IP:5000
+https://nebula-challenges-zerosignalctf.up.railway.app
 
 Your objective: Gain admin access to the control panel and retrieve the classified signal.
 
@@ -193,7 +193,7 @@ No credentials have been provided. You'll need to find another way in.`,
 
 Explore the site. Check what the robots don't want you to see, and what the frontend code might be whispering to itself.
 
-Target: http://localhost:5001`,
+Target: https://robust-unity-zerosignalctf.up.railway.app`,
       points: 100,
     },
     {
@@ -203,7 +203,7 @@ Target: http://localhost:5001`,
 
 Sometimes the most dangerous tool is the one you forgot to lock.
 
-Target: http://localhost:5002
+Target: https://gracious-gratitude-zerosignalctf.up.railway.app
 
 Note: This challenge requires sending a raw HTTP POST request — the web form won't let you type what you need. Use curl, Postman, or a script.`,
       points: 100,
@@ -440,7 +440,7 @@ export const ChallengePanel: React.FC<{ activePlanetId: string }> = ({ activePla
             {/* Challenge Body */}
             {expandedId === challenge.id && (
               <div className="px-4 py-4 bg-black/30 space-y-3">
-                <pre className="text-slate-400 text-xs whitespace-pre-wrap leading-relaxed">
+                <pre className="text-slate-400 text-xs whitespace-pre-wrap leading-relaxed select-text">
                   {challenge.description}
                 </pre>
 
