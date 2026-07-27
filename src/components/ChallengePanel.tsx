@@ -273,18 +273,18 @@ Download the image below to begin Fragment II.`,
     },
   ],
   'the-summit': [
-    {
-      id: 17,
-      title: 'The Summit — Broken Authority',
-      description: `The final transmission has cut. One node remains — THE SUMMIT — guarded by four independent, differently-broken subsystems.
+   {
+  id: 17,
+  title: 'The Summit — Broken Authority',
+  description: `The final transmission has cut. One node remains — THE SUMMIT — guarded by four independent, differently-broken subsystems.
 
-Target: http://SUMMIT_SERVER_IP:5003
+Target: https://summit-server-zerosignalctf.up.railway.app
 
 Break any subsystem to seize control. Whoever captures dethrones the current holder instantly. But that subsystem won't work twice in a row — once used, find a different weakness to recapture. Only after all four have been used does the cycle reset.
 
 Hold The Summit and earn +20 points every 60 seconds — for as long as you can defend it.`,
-      points: 0,
-    },
+  points: 400,
+},
   ],
 }
 
