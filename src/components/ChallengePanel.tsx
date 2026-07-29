@@ -180,14 +180,14 @@ Two files were recovered from a compromised PHANTOM UNIT server:
 
 Target: https://nebula-challenges-zerosignalctf.up.railway.app
 
-This is a multi-stage exploit chain, not a single trick:
+This is a two-stage exploit chain, not a single trick:
 
 1. Somewhere on this node, a hidden value can only be confirmed one bit at a time — the app will only ever tell you TRUE or FALSE, nothing more.
-2. What you extract lets you reconstruct a signing secret. Use it to forge your own credentials.
-3. Your forged credentials only buy you a live, time-limited handshake. The flag is never stored anywhere on the server — it only gets generated the moment you complete that handshake correctly.
+2. What you extract lets you reconstruct a signing secret. Use it to forge your own credentials and gain access.
 
 No single request solves this. You will need to script it.`,
       points: 100,
+      hintsCount: 1,
     },
     {
       id: 11,
