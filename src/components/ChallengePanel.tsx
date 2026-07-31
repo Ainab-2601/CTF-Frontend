@@ -270,7 +270,7 @@ FRAGMENT III — Once you recover the hidden program, it will not open easily. I
 Combine what you find. The key that decodes the first fragment is the same key the final lock demands.
 
 Download the image below to begin Fragment II.`,
-      points: 300,
+      points: 100,
       downloadUrl: `${BACKEND}/files/void_core_transmission.png`,
       downloadName: 'void_core_transmission.png',
     },
@@ -291,7 +291,7 @@ Our cryptanalysts confirmed:
 - The plaintext follows the format: VOID_FRAG_[NAME]::[NUMBER]
 
 Decrypt to recover the first fragment.`,
-      points: 25,
+      points: 20,
     },
     {
       id: 18,
@@ -306,7 +306,7 @@ Once you extract the key from the spectrogram, use it to decrypt this XOR-encryp
 
 Ciphertext (hex):
 130c010b1a051a0e021c0a0a1102727574`,
-      points: 25,
+      points: 20,
       downloadUrl: `${BACKEND}/files/void_transmission.wav`,
       downloadName: 'void_transmission.wav',
     },
@@ -326,7 +326,7 @@ Search this identifier on GitHub — particularly in repositories maintained by 
 Once located, you'll find encrypted data. The encryption method should be familiar — VOID doesn't invent new ciphers.
 
 Extract the third fragment.`,
-      points: 25,
+      points: 20,
     },
     {
       id: 20,
@@ -340,7 +340,7 @@ The fragment is hidden using the same steganographic method VOID employs across 
 Extract the hidden message to recover the fourth fragment.
 
 Once you have all four fragments, proceed to the Final Assembly challenge.`,
-      points: 25,
+      points: 20,
       downloadUrl: `${BACKEND}/files/void_fragment_stage4.png`,
       downloadName: 'void_fragment_stage4.png',
     },
@@ -366,7 +366,7 @@ Count the structural elements:
 Combine these counts into a single code and use it to unlock VOID CORE.
 
 Flag format: ZEROSIG{[code]}`,
-      points: 200,
+      points: 100,
     },
   ],
   'the-summit': [
@@ -380,7 +380,7 @@ Target: http://SUMMIT_SERVER_IP:5003
 Break any subsystem to seize control. Whoever captures dethrones the current holder instantly. But that subsystem won't work twice in a row — once used, find a different weakness to recapture. Only after all four have been used does the cycle reset.
 
 Hold The Summit and earn +20 points every 60 seconds — for as long as you can defend it.`,
-      points: 0,
+      points: 300,
     },
   ],
 }
