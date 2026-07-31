@@ -187,7 +187,7 @@ This is a multi-stage exploit chain, not a single trick:
 3. Your forged credentials only buy you a live, time-limited handshake. The flag is never stored anywhere on the server — it only gets generated the moment you complete that handshake correctly.
 
 No single request solves this. You will need to script it.`,
-      points: 100,
+      points: 50,
     },
     {
       id: 11,
@@ -209,7 +209,7 @@ Sometimes the most dangerous tool is the one you forgot to lock.
 Target: https://gracious-gratitude-zerosignalctf.up.railway.app
 
 Note: This challenge requires sending a raw HTTP POST request — the web form won't let you type what you need. Use curl, Postman, or a script.`,
-      points: 100,
+      points: 200,
     },
   ],
   axiom: [
@@ -223,7 +223,7 @@ Sometimes files aren't broken by accident. Look at the raw bytes and compare aga
 Download the file and inspect it in a hex editor.
 
 Tools that may help: HxD (Windows), xxd, or any hex editor.`,
-      points: 100,
+      points: 50,
       downloadUrl: `${BACKEND}/files/transmission_corrupted.png`,
       downloadName: 'transmission_corrupted.png',
     },
@@ -235,7 +235,7 @@ Tools that may help: HxD (Windows), xxd, or any hex editor.`,
 Figure out how the file hides its real code, extract the validation logic, and derive a serial that passes the check.
 
 Run the file with: python void_activation.py`,
-      points: 150,
+      points: 100,
       downloadUrl: `${BACKEND}/files/void_activation.py`,
       downloadName: 'void_activation.py',
     },
@@ -249,7 +249,7 @@ gu3_i01q_a3i3e_fy33cf
 We also recovered the lock program itself, but its validation logic is not straightforward — reverse it carefully.
 
 Run the file with: python void_lock.py`,
-      points: 150,
+      points: 200,
       downloadUrl: `${BACKEND}/files/void_lock.py`,
       downloadName: 'void_lock.py',
     },
@@ -366,7 +366,7 @@ Count the structural elements:
 Combine these counts into a single code and use it to unlock VOID CORE.
 
 Flag format: ZEROSIG{[code]}`,
-      points: 100,
+      points: 200,
     },
   ],
   'the-summit': [
