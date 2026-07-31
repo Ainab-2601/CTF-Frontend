@@ -27,6 +27,7 @@ interface CTFState {
   socket: Socket | null;
   currentTeamId: string | null;
   setCurrentTeam: (teamId: string) => void;
+  clearTeam: () => void;
   initSocket: (backendUrl: string) => void;
   fetchInitialState: (backendUrl: string) => Promise<void>;
 }
@@ -54,6 +55,11 @@ export const useStore = create<CTFState>((set, get) => ({
   setCurrentTeam: (teamId: string) => {
     localStorage.setItem('team_id', teamId);
     set({ currentTeamId: teamId });
+  },
+
+  clearTeam: () => {
+    localStorage.removeItem('team_id');
+    set({ currentTeamId: null });
   },
 
   initSocket: (backendUrl: string) => {

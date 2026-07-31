@@ -173,21 +173,21 @@ Two files were recovered from a compromised PHANTOM UNIT server:
     },
   ],
   nebula: [
-   {
+    {
       id: 10,
       title: 'Nebula I — The Relay Node',
       description: `VOID rebuilt their control node after the last breach — but rumor has it a legacy debug feature never got removed.
 
 Target: https://nebula-challenges-zerosignalctf.up.railway.app
 
-This is a two-stage exploit chain, not a single trick:
+This is a multi-stage exploit chain, not a single trick:
 
 1. Somewhere on this node, a hidden value can only be confirmed one bit at a time — the app will only ever tell you TRUE or FALSE, nothing more.
-2. What you extract lets you reconstruct a signing secret. Use it to forge your own credentials and gain access.
+2. What you extract lets you reconstruct a signing secret. Use it to forge your own credentials.
+3. Your forged credentials only buy you a live, time-limited handshake. The flag is never stored anywhere on the server — it only gets generated the moment you complete that handshake correctly.
 
 No single request solves this. You will need to script it.`,
       points: 100,
-      hintsCount: 1,
     },
     {
       id: 11,
@@ -276,18 +276,18 @@ Download the image below to begin Fragment II.`,
     },
   ],
   'the-summit': [
-   {
-  id: 17,
-  title: 'The Summit — Broken Authority',
-  description: `The final transmission has cut. One node remains — THE SUMMIT — guarded by four independent, differently-broken subsystems.
+    {
+      id: 17,
+      title: 'The Summit — Broken Authority',
+      description: `The final transmission has cut. One node remains — THE SUMMIT — guarded by four independent, differently-broken subsystems.
 
-Target: https://summit-server-zerosignalctf.up.railway.app
+Target: http://SUMMIT_SERVER_IP:5003
 
 Break any subsystem to seize control. Whoever captures dethrones the current holder instantly. But that subsystem won't work twice in a row — once used, find a different weakness to recapture. Only after all four have been used does the cycle reset.
 
 Hold The Summit and earn +20 points every 60 seconds — for as long as you can defend it.`,
-  points: 400,
-},
+      points: 0,
+    },
   ],
 }
 
@@ -300,6 +300,7 @@ interface HintStatus {
 
 export const ChallengePanel: React.FC<{ activePlanetId: string }> = ({ activePlanetId }) => {
   const currentTeamId = useStore((state) => state.currentTeamId)
+  const clearTeam = useStore((state) => state.clearTeam)
   const planets = useStore((state) => state.planets)
   const [expandedId, setExpandedId] = useState<number | null>(null)
   const [flags, setFlags] = useState<Record<number, string>>({})
@@ -335,6 +336,10 @@ export const ChallengePanel: React.FC<{ activePlanetId: string }> = ({ activePla
         body: JSON.stringify({ teamId: currentTeamId, challengeId, hintIndex }),
       })
       const data = await res.json()
+      if (data.error === 'TEAM_NOT_FOUND') {
+        clearTeam()
+        return
+      }
       if (res.ok) {
         setHints(prev => ({
           ...prev,
@@ -378,6 +383,11 @@ export const ChallengePanel: React.FC<{ activePlanetId: string }> = ({ activePla
       })
 
       const data = await res.json()
+
+      if (data.error === 'TEAM_NOT_FOUND') {
+        clearTeam()
+        return
+      }
 
       if (res.ok && data.correct) {
         setStatuses(prev => ({
