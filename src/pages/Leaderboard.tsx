@@ -4,14 +4,16 @@ import { Trophy, ArrowLeft } from 'lucide-react';
 
 export const Leaderboard: React.FC<{ onBackToArena?: () => void }> = ({ onBackToArena }) => {
   const fetchInitialState = useStore((state) => state.fetchInitialState);
+  const initSocket = useStore((state) => state.initSocket);
   const leaderboard = useStore((state) => state.leaderboard);
 
   useEffect(() => {
     const apiTarget = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+    initSocket(apiTarget); // ensures the score:update socket listener exists
     fetchInitialState(apiTarget);
     const poller = setInterval(() => fetchInitialState(apiTarget), 15000); // Failover fallback poller
     return () => clearInterval(poller);
-  }, [fetchInitialState]);
+  }, [fetchInitialState, initSocket]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 p-6 font-mono">
