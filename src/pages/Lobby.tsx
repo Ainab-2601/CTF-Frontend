@@ -3,6 +3,7 @@ import { useStore } from '../store/useStore';
 import { ShieldAlert, Cpu } from 'lucide-react';
 
 export const Lobby: React.FC<{ onAuthSuccess: () => void }> = ({ onAuthSuccess }) => {
+  const [leadName, setLeadName] = useState('');
   const [teamName, setTeamName] = useState('');
   const [teamColor, setTeamColor] = useState('#22c55e');
   const [error, setError] = useState('');
@@ -10,13 +11,13 @@ export const Lobby: React.FC<{ onAuthSuccess: () => void }> = ({ onAuthSuccess }
 
   const joinSession = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!teamName.trim()) return
+    if (!teamName.trim() || !leadName.trim()) return
 
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/teams/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: teamName.trim(), color: teamColor }),
+        body: JSON.stringify({ name: teamName.trim(), color: teamColor, leadName: leadName.trim() }),
       })
       const data = await res.json()
 
@@ -47,6 +48,18 @@ export const Lobby: React.FC<{ onAuthSuccess: () => void }> = ({ onAuthSuccess }
         </div>
 
         <form onSubmit={joinSession} className="space-y-4">
+          <div>
+            <label className="block text-[10px] text-slate-400 uppercase tracking-wider mb-1.5">Team Lead Name</label>
+            <input
+              type="text"
+              required
+              value={leadName}
+              onChange={(e) => setLeadName(e.target.value)}
+              placeholder="Enter your full name exactly"
+              className="w-full bg-black/60 border border-slate-700 rounded px-3 py-2 text-xs text-emerald-400 focus:outline-none focus:border-emerald-500"
+            />
+          </div>
+
           <div>
             <label className="block text-[10px] text-slate-400 uppercase tracking-wider mb-1.5">Crew Callsign (Name)</label>
             <input
