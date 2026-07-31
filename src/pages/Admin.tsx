@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Shield, Play, RotateCcw, Trash2, Trophy, Square } from 'lucide-react'
+import { Shield, Play, RotateCcw, Trash2, Trophy, Square, Skull } from 'lucide-react'
 
 interface Team {
   id: string
@@ -32,7 +32,7 @@ export const Admin: React.FC = () => {
   useEffect(() => {
     if (authed) {
       fetchLeaderboard()
-      const interval = setInterval(fetchLeaderboard, 10000)
+      const interval = setInterval(fetchLeaderboard, 30000)
       return () => clearInterval(interval)
     }
   }, [authed])
@@ -52,6 +52,18 @@ export const Admin: React.FC = () => {
   const endRound = async () => {
     if (!confirm('Current round turant khatam ho jayega — flag submissions lock ho jayenge jab tak naya round start na ho. Confirm?')) return
     const res = await fetch(`${BACKEND}/api/rounds/end`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const data = await res.json()
+    setMessage(data.message)
+    fetchLeaderboard()
+    setTimeout(() => setMessage(''), 3000)
+  }
+
+  const eliminateLowest = async () => {
+    if (!confirm('Sabse kam score wali 3 active teams eliminate ho jaayengi. Confirm?')) return
+    const res = await fetch(`${BACKEND}/api/rounds/eliminate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -162,6 +174,13 @@ export const Admin: React.FC = () => {
               >
                 <Square size={12} />
                 END CURRENT ROUND
+              </button>
+              <button
+                onClick={eliminateLowest}
+                className="w-full flex items-center justify-center gap-2 bg-rose-900/40 hover:bg-rose-800/60 border border-rose-800 text-rose-400 text-xs font-bold py-2 rounded tracking-widest uppercase transition-all"
+              >
+                <Skull size={12} />
+                ELIMINATE LOWEST 3
               </button>
             </div>
           </div>
