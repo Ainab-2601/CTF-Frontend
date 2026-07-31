@@ -274,10 +274,104 @@ Download the image below to begin Fragment II.`,
       downloadUrl: `${BACKEND}/files/void_core_transmission.png`,
       downloadName: 'void_core_transmission.png',
     },
+    {
+      id: 17,
+      title: 'Void Core — Stage 1: The First Fragment',
+      description: `VOID's core stirred. Deep space receiver #1 intercepted the first fragment of its activation sequence, encrypted using VOID's signature method.
+
+Ciphertext:
+[1172, 716, 559, 2220, 14, 1204, 1726, 2497, 898, 2497, 14, 1912, 1305, 1340, 2666, 1062, 1359, 1823]
+
+Encryption layers:
+- RSA: n = 2773, e = 13
+- Encoding: Unknown single-byte XOR key, then bit rotation by (position mod 8)
+
+Our cryptanalysts confirmed:
+- n = 2773 is the product of two primes
+- The plaintext follows the format: VOID_FRAG_[NAME]::[NUMBER]
+
+Decrypt to recover the first fragment.`,
+      points: 25,
+    },
+    {
+      id: 18,
+      title: 'Void Core — Stage 2: The Hidden Signal',
+      description: `A second fragment was intercepted, hidden inside a corrupted audio transmission.
+
+Download the audio file below.
+
+Our analysts believe VOID encoded a decryption key visually in the spectrogram. The key is visible when you view the audio in spectrogram form (use Audacity or similar tool).
+
+Once you extract the key from the spectrogram, use it to decrypt this XOR-encrypted fragment:
+
+Ciphertext (hex):
+130c010b1a051a0e021c0a0a1102727574`,
+      points: 25,
+      downloadUrl: `${BACKEND}/files/void_transmission.wav`,
+      downloadName: 'void_transmission.wav',
+    },
+    {
+      id: 19,
+      title: 'Void Core — Stage 3: The Archive',
+      description: `VOID's infrastructure mirrors the organizational structure of this CTF itself.
+
+Our lead analyst, Elisha, discovered traces of automated backups scattered across public platforms under seemingly innocuous accounts.
+
+A partial archive identifier was recovered from deep packet inspection:
+
+ZEROSIG_FRAGMENT_GAMMA_ARCHIVE_7B4K2M9N
+
+Search this identifier on GitHub — particularly in repositories maintained by the CTF's operational teams (like ellietj8-code).
+
+Once located, you'll find encrypted data. The encryption method should be familiar — VOID doesn't invent new ciphers.
+
+Extract the third fragment.`,
+      points: 25,
+    },
+    {
+      id: 20,
+      title: 'Void Core — Stage 4: The Final Archive',
+      description: `The fourth and final fragment was hidden in VOID's primary data vault.
+
+Download the image file below.
+
+The fragment is hidden using the same steganographic method VOID employs across all their communications — LSB encoding in the red channel.
+
+Extract the hidden message to recover the fourth fragment.
+
+Once you have all four fragments, proceed to the Final Assembly challenge.`,
+      points: 25,
+      downloadUrl: `${BACKEND}/files/void_fragment_stage4.png`,
+      downloadName: 'void_fragment_stage4.png',
+    },
+    {
+      id: 21,
+      title: 'Void Core — Final Transmission',
+      description: `You have recovered all four fragments of VOID's activation sequence.
+
+Each fragment contains an embedded position marker (::N).
+
+Sort the fragments by their position markers in ascending order (1 → 2 → 3 → 4).
+
+Extract only the FRAGMENT NAMES and concatenate them with underscores:
+
+VOID_FRAG_[NAME1]_VOID_FRAG_[NAME2]_VOID_FRAG_[NAME3]_VOID_FRAG_[NAME4]
+
+This assembled sequence contains the activation code.
+
+Count the structural elements:
+- How many underscores?
+- How many times does each fragment name appear?
+
+Combine these counts into a single code and use it to unlock VOID CORE.
+
+Flag format: ZEROSIG{[code]}`,
+      points: 200,
+    },
   ],
   'the-summit': [
     {
-      id: 17,
+      id: 22,
       title: 'The Summit — Broken Authority',
       description: `The final transmission has cut. One node remains — THE SUMMIT — guarded by four independent, differently-broken subsystems.
 
